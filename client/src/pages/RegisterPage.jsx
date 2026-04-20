@@ -1,0 +1,77 @@
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from '../context/useAuth'
+import axios from 'axios'
+
+const RegisterPage = () => {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    const {login} = useAuth()
+    const navigate = useNavigate()
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setError('')
+        setLoading(true)
+
+        try {
+            const res = await axios.post('/api/auth/register', {email, password})
+            login(res.data.token, res.data.user)
+            navigate('/')
+        } catch (err) {
+            setError(err.response?.data?.error || 'something went wrong')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    return (
+        <main style={styles.container}>
+        <div style={styles.card}>
+            <h1 style={styles.title}>Register</h1>
+            {error && <p style={styles.error}>{error}</p>}
+            <form onSubmit={handleSubmit} style={styles.form}>
+            <label style={styles.label}>Email</label>
+            <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                style={styles.input}
+                required
+            />
+            <label style={styles.label}>Password</label>
+            <input
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                style={styles.input}
+                required
+            />
+            <button type="submit" style={styles.btn} disabled={loading}>
+                {loading ? 'Creating account...' : 'Register'}
+            </button>
+            </form>
+            <p style={styles.switch}>
+            Have an account? <Link to="/login">Login</Link>
+            </p>
+        </div>
+        </main>
+    );
+}
+
+const styles = {
+    container: { display: 'flex', justifyContent: 'center', padding: '4rem 1rem' },
+    card: { background: '#fff', padding: '2rem', borderRadius: '8px', width: '100%', maxWidth: '400px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' },
+    title: { marginBottom: '1.5rem' },
+    form: { display: 'flex', flexDirection: 'column', gap: '0.75rem' },
+    label: { fontWeight: 500, fontSize: '0.9rem' },
+    input: { padding: '0.6rem', borderRadius: '4px', border: '1px solid #ccc', fontSize: '1rem' },
+    btn: { marginTop: '0.5rem', padding: '0.75rem', background: '#222', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '1rem' },
+    error: { color: '#c00', marginBottom: '1rem', fontSize: '0.9rem' },
+    switch: { marginTop: '1rem', textAlign: 'center', fontSize: '0.9rem' },
+};
+
+export default RegisterPage;
