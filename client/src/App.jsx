@@ -10,7 +10,7 @@ import CartPage from "./pages/CartPage";
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/ecomm-store">
       <AuthProvider>
         <Navbar></Navbar>
         <Routes>
