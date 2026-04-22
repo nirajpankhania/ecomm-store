@@ -23,7 +23,7 @@ jobs:
       - name: Build
         run: |
           cd client
-          echo 'api url is : $VITE_API_URL'
+          echo "api url is : $VITE_API_URL"
           npm run build
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
