@@ -19,7 +19,7 @@ const RegisterPage = () => {
         setLoading(true)
 
         try {
-            const res = await axios.post('/auth/register', {email, password})
+            const res = await api.post('/auth/register', {email, password})
             login(res.data.token, res.data.user)
             navigate('/')
         } catch (err) {
