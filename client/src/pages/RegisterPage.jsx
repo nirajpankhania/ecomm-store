@@ -14,6 +14,7 @@ const RegisterPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        console.log('form submitted')
         setError('')
         setLoading(true)
 
